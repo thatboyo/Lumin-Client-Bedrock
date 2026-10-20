@@ -1,4 +1,6 @@
-# Lumin
+# Lumin Client Bedrock
+
+A Minecraft Bedrock client project built with Codex.
 
 Lumin is a Windows Presentation Foundation application for a modular Minecraft Bedrock client experience. The first scaffold is a standalone UI preview: the module catalog and switches update local application state, while game integration is explicitly unavailable.
 
