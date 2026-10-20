@@ -1,0 +1,77 @@
+<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+    <!-- Centralized Lumin palette: monochrome environment, restrained module light. -->
+    <Color x:Key="WorldBlack">#FF000001</Color>
+    <Color x:Key="WorldCharcoal">#FF050609</Color>
+    <Color x:Key="WorldSmoke">#E6090B0F</Color>
+    <Color x:Key="WorldSilver">#FFD5D9E0</Color>
+    <Color x:Key="WorldWhite">#FFFFFFFF</Color>
+    <Color x:Key="WorldMuted">#FF7F8792</Color>
+    <Color x:Key="GlassStroke">#35FFFFFF</Color>
+    <Color x:Key="GlassHighlight">#1CFFFFFF</Color>
+    <Color x:Key="AccentBright">#FFFFFFFF</Color>
+    <Color x:Key="AccentPrimary">#FFDDF5FF</Color>
+    <Color x:Key="AccentHalo">#99DDF5FF</Color>
+    <Color x:Key="EnabledSurface">#B50B0F15</Color>
+    <Color x:Key="SelectedSurface">#D70D1219</Color>
+    <Color x:Key="AtmosphereCore">#2EFFFFFF</Color>
+    <Color x:Key="GlassHoverSurface">#D111151B</Color>
+    <Color x:Key="GlassHoverStroke">#66FFFFFF</Color>
+    <Color x:Key="StatusAmber">#FFE7BD78</Color>
+    <Color x:Key="StatusRed">#FFE68B91</Color>
+
+    <SolidColorBrush x:Key="WorldBlackBrush" Color="{StaticResource WorldBlack}" />
+    <SolidColorBrush x:Key="WorldCharcoalBrush" Color="{StaticResource WorldCharcoal}" />
+    <SolidColorBrush x:Key="WorldSmokeBrush" Color="{StaticResource WorldSmoke}" />
+    <SolidColorBrush x:Key="WorldSilverBrush" Color="{StaticResource WorldSilver}" />
+    <SolidColorBrush x:Key="WorldWhiteBrush" Color="{StaticResource WorldWhite}" />
+    <SolidColorBrush x:Key="WorldMutedBrush" Color="{StaticResource WorldMuted}" />
+    <SolidColorBrush x:Key="GlassStrokeBrush" Color="{StaticResource GlassStroke}" />
+    <SolidColorBrush x:Key="GlassHighlightBrush" Color="{StaticResource GlassHighlight}" />
+    <SolidColorBrush x:Key="AccentBrightBrush" Color="{StaticResource AccentBright}" />
+    <SolidColorBrush x:Key="AccentPrimaryBrush" Color="{StaticResource AccentPrimary}" />
+    <SolidColorBrush x:Key="AccentHaloBrush" Color="{StaticResource AccentHalo}" />
+    <SolidColorBrush x:Key="EnabledSurfaceBrush" Color="{StaticResource EnabledSurface}" />
+    <SolidColorBrush x:Key="SelectedSurfaceBrush" Color="{StaticResource SelectedSurface}" />
+    <SolidColorBrush x:Key="GlassHoverSurfaceBrush" Color="{StaticResource GlassHoverSurface}" />
+    <SolidColorBrush x:Key="GlassHoverStrokeBrush" Color="{StaticResource GlassHoverStroke}" />
+    <RadialGradientBrush x:Key="AtmosphereGlow" RadiusX="0.5" RadiusY="0.5">
+        <GradientStop Color="{StaticResource AtmosphereCore}" Offset="0" />
+        <GradientStop Color="#00FFFFFF" Offset="1" />
+    </RadialGradientBrush>
+
+    <LinearGradientBrush x:Key="WorldBackdrop" StartPoint="0,0" EndPoint="1,1">
+        <!-- High-opacity grayscale veil lets Windows composition show softly through when available. -->
+        <GradientStop Color="#F9000001" Offset="0" />
+        <GradientStop Color="#FC030406" Offset="0.5" />
+        <GradientStop Color="#FE000001" Offset="1" />
+    </LinearGradientBrush>
+    <LinearGradientBrush x:Key="GlassPanel" StartPoint="0,0" EndPoint="0,1">
+        <GradientStop Color="#F20A0C10" Offset="0" />
+        <GradientStop Color="#EE030406" Offset="1" />
+    </LinearGradientBrush>
+    <LinearGradientBrush x:Key="GlassTile" StartPoint="0,0" EndPoint="1,1">
+        <GradientStop Color="#E00B0E13" Offset="0" />
+        <GradientStop Color="#D0020305" Offset="1" />
+    </LinearGradientBrush>
+
+    <DropShadowEffect x:Key="PanelShadow" Color="#FFDDF5FF" BlurRadius="34" ShadowDepth="5" Opacity="0.22" />
+    <DropShadowEffect x:Key="GlassHoverGlow" Color="#FFDDF5FF" BlurRadius="20" ShadowDepth="0" Opacity="0.42" />
+    <DropShadowEffect x:Key="NavGlow" Color="#FFDDF5FF" BlurRadius="14" ShadowDepth="0" Opacity="0.82" />
+    <DropShadowEffect x:Key="ModuleHalo" Color="#FFDDF5FF" BlurRadius="24" ShadowDepth="0" Opacity="0.68" />
+    <DropShadowEffect x:Key="SelectedHalo" Color="#FFDDF5FF" BlurRadius="34" ShadowDepth="0" Opacity="0.98" />
+    <DropShadowEffect x:Key="TextGlow" Color="#FFDDF5FF" BlurRadius="14" ShadowDepth="0" Opacity="0.92" />
+
+    <Style x:Key="TitleText" TargetType="TextBlock">
+        <Setter Property="Foreground" Value="{StaticResource WorldWhiteBrush}" />
+        <Setter Property="FontFamily" Value="Segoe UI Variable Display" />
+        <Setter Property="FontWeight" Value="SemiBold" />
+    </Style>
+    <Style x:Key="BodyText" TargetType="TextBlock">
+        <Setter Property="Foreground" Value="{StaticResource WorldSilverBrush}" />
+        <Setter Property="FontFamily" Value="Segoe UI Variable Text" />
+    </Style>
+    <Style x:Key="MutedText" TargetType="TextBlock" BasedOn="{StaticResource BodyText}">
+        <Setter Property="Foreground" Value="{StaticResource WorldMutedBrush}" />
+    </Style>
+</ResourceDictionary>

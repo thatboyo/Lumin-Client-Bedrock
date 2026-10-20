@@ -1,0 +1,12 @@
+# Build output
+bin/
+obj/
+.work/
+
+# Visual Studio / IDE state
+.vs/
+*.user
+*.suo
+
+# User-specific local settings
+*.local.json

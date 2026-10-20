@@ -1,0 +1,205 @@
+<Window x:Class="Lumin.Views.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:models="clr-namespace:Lumin.Models"
+        Title="Lumin" Width="1280" Height="820" MinWidth="920" MinHeight="620"
+        WindowStartupLocation="CenterScreen" Background="#01000000" Foreground="{DynamicResource WorldWhiteBrush}"
+        FontFamily="Segoe UI Variable Text" UseLayoutRounding="True" SnapsToDevicePixels="True">
+    <Window.Icon>
+        <BitmapImage UriSource="/Lumin;component/Assets/Lumin-AppIcon.png" />
+    </Window.Icon>
+    <Window.Resources>
+        <DataTemplate DataType="{x:Type models:ModuleItem}">
+            <Border x:Name="ModuleCard" Style="{StaticResource GlassCard}" Padding="16" Margin="0,0,0,10" Effect="{x:Null}">
+                <Grid>
+                    <Grid.ColumnDefinitions><ColumnDefinition Width="*"/><ColumnDefinition Width="Auto"/></Grid.ColumnDefinitions>
+                    <Button Grid.Column="0" Style="{StaticResource ModuleSelectButton}" Click="SelectModule_Click">
+                        <StackPanel>
+                            <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
+                                <TextBlock x:Name="ModuleName" Text="{Binding Name}" FontSize="15" FontWeight="SemiBold" Foreground="{DynamicResource WorldSilverBrush}" />
+                                <TextBlock Text="  ·  " Foreground="{DynamicResource WorldMutedBrush}" />
+                                <TextBlock Text="{Binding Category}" FontSize="10" Foreground="{DynamicResource WorldMutedBrush}" VerticalAlignment="Center" />
+                                <Border Margin="9,0,0,0" Padding="6,2" CornerRadius="4" Background="#24FFFFFF" Visibility="{Binding IsExperimental, Converter={StaticResource BoolToVisibilityConverter}}">
+                                    <TextBlock Text="EXPERIMENTAL" FontSize="9" Foreground="{DynamicResource WorldSilverBrush}" />
+                                </Border>
+                            </StackPanel>
+                            <TextBlock Text="{Binding Description}" Margin="0,6,14,0" FontSize="12" Foreground="{DynamicResource WorldMutedBrush}" TextWrapping="Wrap" />
+                            <StackPanel Orientation="Horizontal" Margin="0,9,0,0">
+                                <Ellipse Width="5" Height="5" Fill="{DynamicResource WorldMutedBrush}" VerticalAlignment="Center" />
+                                <TextBlock Text="{Binding Availability}" Margin="6,0,0,0" FontSize="10" Foreground="{DynamicResource WorldMutedBrush}" />
+                            </StackPanel>
+                        </StackPanel>
+                    </Button>
+                    <StackPanel Grid.Column="1" Orientation="Horizontal" VerticalAlignment="Center" Margin="12,0,0,0">
+                        <TextBlock Text="{Binding StateLabel}" FontSize="9" Foreground="{DynamicResource WorldMutedBrush}" VerticalAlignment="Center" Margin="0,0,12,0" />
+                        <CheckBox Style="{StaticResource ModuleToggle}" IsChecked="{Binding IsEnabled, Mode=TwoWay}" IsEnabled="{Binding CanEnable}" AutomationProperties.Name="Toggle module" />
+                    </StackPanel>
+                </Grid>
+            </Border>
+            <DataTemplate.Triggers>
+                <DataTrigger Binding="{Binding IsEnabled}" Value="True">
+                    <Setter TargetName="ModuleCard" Property="BorderBrush" Value="{DynamicResource AccentHaloBrush}" />
+                    <Setter TargetName="ModuleCard" Property="Background" Value="{DynamicResource EnabledSurfaceBrush}" />
+                    <Setter TargetName="ModuleCard" Property="Effect" Value="{DynamicResource ModuleHalo}" />
+                </DataTrigger>
+                <DataTrigger Binding="{Binding IsSelected}" Value="True">
+                    <Setter TargetName="ModuleCard" Property="BorderBrush" Value="{DynamicResource AccentBrightBrush}" />
+                    <Setter TargetName="ModuleCard" Property="BorderThickness" Value="1.5" />
+                    <Setter TargetName="ModuleCard" Property="Background" Value="{DynamicResource SelectedSurfaceBrush}" />
+                    <Setter TargetName="ModuleCard" Property="Effect" Value="{DynamicResource SelectedHalo}" />
+                    <Setter TargetName="ModuleName" Property="Foreground" Value="{DynamicResource AccentBrightBrush}" />
+                </DataTrigger>
+                <DataTrigger Binding="{Binding IsEnabled}" Value="False">
+                    <Setter TargetName="ModuleCard" Property="Opacity" Value="0.82" />
+                </DataTrigger>
+            </DataTemplate.Triggers>
+        </DataTemplate>
+    </Window.Resources>
+
+    <Grid x:Name="ApplicationSurface" Background="{DynamicResource WorldBackdrop}">
+        <Grid.LayoutTransform><ScaleTransform x:Name="InterfaceScaleTransform" ScaleX="1" ScaleY="1" /></Grid.LayoutTransform>
+        <!-- Low-contrast theme bloom adds depth behind the glass while keeping text surfaces dark. -->
+        <Ellipse Width="650" Height="650" HorizontalAlignment="Right" VerticalAlignment="Top" Margin="0,-300,-170,0" IsHitTestVisible="False" Opacity="0.58" Fill="{DynamicResource AtmosphereGlow}">
+            <Ellipse.Effect><BlurEffect Radius="68" /></Ellipse.Effect>
+        </Ellipse>
+        <Ellipse Width="520" Height="520" HorizontalAlignment="Left" VerticalAlignment="Bottom" Margin="-220,0,0,-250" IsHitTestVisible="False" Opacity="0.28" Fill="{DynamicResource AtmosphereGlow}">
+            <Ellipse.Effect><BlurEffect Radius="58" /></Ellipse.Effect>
+        </Ellipse>
+        <Grid Margin="18">
+            <Grid.ColumnDefinitions><ColumnDefinition Width="208"/><ColumnDefinition Width="18"/><ColumnDefinition Width="*"/></Grid.ColumnDefinitions>
+            <Border Grid.Column="0" Background="{DynamicResource GlassPanel}" BorderBrush="{DynamicResource GlassStrokeBrush}" BorderThickness="1" CornerRadius="18" Padding="14" Effect="{DynamicResource PanelShadow}">
+                <DockPanel>
+                    <StackPanel DockPanel.Dock="Top" Margin="0,0,0,14">
+                        <Image Source="/Lumin;component/Assets/Lumin-Transparent.png" Width="162" Height="162" HorizontalAlignment="Center" Stretch="Uniform" RenderOptions.BitmapScalingMode="HighQuality" AutomationProperties.Name="Lumin Client logo" />
+                    </StackPanel>
+                    <StackPanel DockPanel.Dock="Bottom" Margin="4,12,4,3">
+                        <Border Height="1" Background="#20FFFFFF" Margin="0,0,0,13" />
+                        <StackPanel Orientation="Horizontal">
+                            <Ellipse Width="6" Height="6" Fill="#FFB9BEC7" VerticalAlignment="Center" />
+                            <TextBlock Text="STANDALONE PREVIEW" Margin="8,0,0,0" FontSize="9" Foreground="{DynamicResource WorldMutedBrush}" />
+                        </StackPanel>
+                        <TextBlock Text="No game connection" Style="{DynamicResource MutedText}" FontSize="10" Margin="14,7,0,0" />
+                    </StackPanel>
+                    <ScrollViewer VerticalScrollBarVisibility="Auto">
+                        <StackPanel>
+                            <TextBlock Text="WORKSPACE" FontSize="9" Foreground="{DynamicResource WorldMutedBrush}" Margin="6,0,0,9" />
+                            <RadioButton Content="◫   Dashboard" GroupName="Navigation" Style="{StaticResource NavButton}" Tag="Dashboard" IsChecked="True" Checked="Navigation_Checked" />
+                            <RadioButton Content="▦   Modules" GroupName="Navigation" Style="{StaticResource NavButton}" Tag="Modules" Checked="Navigation_Checked" />
+                            <RadioButton Content="◉   Visuals" GroupName="Navigation" Style="{StaticResource NavButton}" Tag="Visuals" Checked="Navigation_Checked" />
+                            <RadioButton Content="⌁   Movement" GroupName="Navigation" Style="{StaticResource NavButton}" Tag="Movement" Checked="Navigation_Checked" />
+                            <RadioButton Content="⌖   Combat" GroupName="Navigation" Style="{StaticResource NavButton}" Tag="Combat" Checked="Navigation_Checked" />
+                            <RadioButton Content="⌘   Utility" GroupName="Navigation" Style="{StaticResource NavButton}" Tag="Utility" Checked="Navigation_Checked" />
+                            <TextBlock Text="PREFERENCES" FontSize="9" Foreground="{DynamicResource WorldMutedBrush}" Margin="6,24,0,9" />
+                            <RadioButton Content="⚙   Settings" GroupName="Navigation" Style="{StaticResource NavButton}" Tag="Settings" Checked="Navigation_Checked" />
+                            <RadioButton Content="▤   Profiles" GroupName="Navigation" Style="{StaticResource NavButton}" Tag="Profiles" Checked="Navigation_Checked" />
+                        </StackPanel>
+                    </ScrollViewer>
+                </DockPanel>
+            </Border>
+
+            <Border Grid.Column="2" Background="{DynamicResource GlassPanel}" BorderBrush="{DynamicResource GlassStrokeBrush}" BorderThickness="1" CornerRadius="18" Padding="26" Effect="{DynamicResource PanelShadow}">
+                <Grid>
+                    <Grid.RowDefinitions><RowDefinition Height="Auto"/><RowDefinition Height="*"/></Grid.RowDefinitions>
+                    <Grid Grid.Row="0" Margin="2,0,2,22">
+                        <StackPanel VerticalAlignment="Center">
+                            <TextBlock x:Name="PageEyebrow" Text="OVERVIEW" FontSize="9" Foreground="{DynamicResource WorldMutedBrush}" />
+                            <TextBlock x:Name="PageTitle" Text="A quieter kind of power." FontSize="27" Style="{DynamicResource TitleText}" Margin="0,6,0,0" />
+                            <TextBlock x:Name="PageDescription" Text="Your modular workspace, shaped around the tools you choose." FontSize="12" Style="{DynamicResource MutedText}" Margin="0,5,0,0" />
+                        </StackPanel>
+                        <Border HorizontalAlignment="Right" VerticalAlignment="Top" Padding="11,7" CornerRadius="9" Background="#24FFFFFF" BorderBrush="{DynamicResource GlassStrokeBrush}" BorderThickness="1">
+                            <StackPanel Orientation="Horizontal"><Ellipse Width="6" Height="6" Fill="{DynamicResource WorldSilverBrush}" VerticalAlignment="Center"/><TextBlock x:Name="ActiveProfileBadge" Text="  LUMIN DEFAULT" FontSize="9" Foreground="{DynamicResource WorldSilverBrush}" VerticalAlignment="Center"/></StackPanel>
+                        </Border>
+                    </Grid>
+
+                    <Grid Grid.Row="1">
+                        <ScrollViewer x:Name="DashboardView" VerticalScrollBarVisibility="Auto">
+                            <StackPanel>
+                                <Grid Margin="0,0,0,14">
+                                    <Grid.ColumnDefinitions><ColumnDefinition Width="1.3*"/><ColumnDefinition Width="12"/><ColumnDefinition Width="1*"/></Grid.ColumnDefinitions>
+                                    <Border Grid.Column="0" Style="{StaticResource GlassCard}" Padding="20" MinHeight="145">
+                                        <StackPanel><TextBlock Text="INTEGRATION" FontSize="9" Foreground="{DynamicResource WorldMutedBrush}"/><TextBlock Text="Standalone preview" FontSize="18" FontWeight="Medium" Foreground="{DynamicResource WorldWhiteBrush}" Margin="0,12,0,4"/><TextBlock Text="UI and local module state are available. Live Bedrock capabilities have not been connected." FontSize="12" Foreground="{DynamicResource WorldMutedBrush}" TextWrapping="Wrap" MaxWidth="530"/><TextBlock Text="CAPABILITIES  ·  NONE DETECTED" Margin="0,16,0,0" FontSize="9" Foreground="{DynamicResource WorldSilverBrush}"/></StackPanel>
+                                    </Border>
+                                    <Border Grid.Column="2" Style="{StaticResource GlassCard}" Padding="20" MinHeight="145">
+                                        <StackPanel><TextBlock Text="ACTIVE MODULES" FontSize="9" Foreground="{DynamicResource WorldMutedBrush}"/><StackPanel Orientation="Horizontal" Margin="0,11,0,0"><TextBlock x:Name="ActiveCount" Text="0" FontSize="34" FontWeight="Light" Foreground="{DynamicResource WorldWhiteBrush}"/><TextBlock Text="  /  19" FontSize="14" Foreground="{DynamicResource WorldMutedBrush}" VerticalAlignment="Bottom" Margin="0,0,0,6"/></StackPanel><TextBlock Text="Local preview state" FontSize="11" Foreground="{DynamicResource WorldMutedBrush}" Margin="0,3,0,0"/></StackPanel>
+                                    </Border>
+                                </Grid>
+                                <Grid Margin="0,0,0,14">
+                                    <Grid.ColumnDefinitions><ColumnDefinition Width="1*"/><ColumnDefinition Width="12"/><ColumnDefinition Width="1*"/></Grid.ColumnDefinitions>
+                                    <Border Grid.Column="0" Style="{StaticResource GlassCard}" Padding="20"><StackPanel><TextBlock Text="QUICK ACCESS" FontSize="9" Foreground="{DynamicResource WorldMutedBrush}"/><TextBlock Text="Frequently used" FontSize="16" FontWeight="Medium" Foreground="{DynamicResource WorldWhiteBrush}" Margin="0,7,0,12"/><ItemsControl x:Name="QuickModules"><ItemsControl.ItemTemplate><DataTemplate DataType="{x:Type models:ModuleItem}"><DockPanel Margin="0,5"><CheckBox DockPanel.Dock="Right" Style="{StaticResource ModuleToggle}" IsChecked="{Binding IsEnabled, Mode=TwoWay}" IsEnabled="{Binding CanEnable}"/><TextBlock Text="{Binding Name}" FontSize="12" Foreground="{DynamicResource WorldSilverBrush}" VerticalAlignment="Center"/></DockPanel></DataTemplate></ItemsControl.ItemTemplate></ItemsControl></StackPanel></Border>
+                                    <Border Grid.Column="2" Style="{StaticResource GlassCard}" Padding="20"><StackPanel><TextBlock Text="RECENT ACTIVITY" FontSize="9" Foreground="{DynamicResource WorldMutedBrush}"/><TextBlock Text="Nothing changed yet" FontSize="16" FontWeight="Medium" Foreground="{DynamicResource WorldWhiteBrush}" Margin="0,7,0,5"/><TextBlock Text="Module changes will appear here while you explore the standalone preview." FontSize="12" Foreground="{DynamicResource WorldMutedBrush}" TextWrapping="Wrap"/></StackPanel></Border>
+                                </Grid>
+                                <Button Content="Browse module library  →" HorizontalAlignment="Left" Style="{StaticResource FilterButton}" Click="BrowseModules_Click" />
+                                <StackPanel Orientation="Horizontal" Margin="0,12,0,0">
+                                    <Button Content="Export activity log" HorizontalAlignment="Left" Style="{StaticResource FilterButton}" Click="ExportActivityLog_Click" />
+                                    <TextBlock x:Name="ActivityLogStatus" Text="Activity logging is off" VerticalAlignment="Center" Margin="10,0,0,0" FontSize="10" Foreground="{DynamicResource WorldMutedBrush}" />
+                                </StackPanel>
+                            </StackPanel>
+                        </ScrollViewer>
+
+                        <Grid x:Name="ModulesView" Visibility="Collapsed">
+                            <Grid.ColumnDefinitions><ColumnDefinition Width="*"/><ColumnDefinition Width="14"/><ColumnDefinition Width="280"/></Grid.ColumnDefinitions>
+                            <Grid Grid.Column="0">
+                                <Grid.RowDefinitions><RowDefinition Height="Auto"/><RowDefinition Height="*"/></Grid.RowDefinitions>
+                                <StackPanel Grid.Row="0" Margin="0,0,0,14">
+                                    <TextBox x:Name="ModuleSearch" Style="{StaticResource SearchBox}" TextChanged="ModuleSearch_TextChanged" ToolTip="Search modules" />
+                                    <WrapPanel Margin="0,10,0,0">
+                                        <Button Content="All" Tag="All" Style="{StaticResource FilterButton}" Click="Filter_Click" Margin="0,0,7,6"/>
+                                        <Button Content="Enabled" Tag="Enabled" Style="{StaticResource FilterButton}" Click="Filter_Click" Margin="0,0,7,6"/>
+                                        <Button Content="Disabled" Tag="Disabled" Style="{StaticResource FilterButton}" Click="Filter_Click" Margin="0,0,7,6"/>
+                                        <Button Content="Experimental" Tag="Experimental" Style="{StaticResource FilterButton}" Click="Filter_Click" Margin="0,0,7,6"/>
+                                    </WrapPanel>
+                                </StackPanel>
+                                <ScrollViewer Grid.Row="1" VerticalScrollBarVisibility="Auto">
+                                    <ItemsControl x:Name="ModuleList" ItemsSource="{Binding ViewModules}" />
+                                </ScrollViewer>
+                            </Grid>
+                            <Border Grid.Column="2" Style="{StaticResource GlassCard}" Padding="18" VerticalAlignment="Top">
+                                <StackPanel>
+                                    <TextBlock Text="MODULE DETAILS" FontSize="9" Foreground="{DynamicResource WorldMutedBrush}" />
+                                    <TextBlock x:Name="DetailName" Text="Select a module" FontSize="17" FontWeight="Medium" Foreground="{DynamicResource WorldWhiteBrush}" Margin="0,13,0,5" TextWrapping="Wrap" />
+                                    <TextBlock x:Name="DetailCategory" Text="Choose a card to inspect its status." FontSize="10" Foreground="{DynamicResource WorldMutedBrush}" />
+                                    <Border Height="1" Background="#20FFFFFF" Margin="0,16,0,14" />
+                                    <TextBlock x:Name="DetailDescription" Text="" FontSize="12" Foreground="{DynamicResource WorldSilverBrush}" TextWrapping="Wrap" />
+                                    <TextBlock Text="AVAILABILITY" FontSize="9" Foreground="{DynamicResource WorldMutedBrush}" Margin="0,20,0,6" />
+                                    <TextBlock x:Name="DetailAvailability" Text="No game connection" FontSize="11" Foreground="{DynamicResource WorldSilverBrush}" TextWrapping="Wrap" />
+                                </StackPanel>
+                            </Border>
+                        </Grid>
+
+                        <Border x:Name="OtherView" Visibility="Collapsed" Style="{StaticResource GlassCard}" Padding="24" VerticalAlignment="Top">
+                            <StackPanel>
+                                <TextBlock Text="LOCAL PREVIEW" FontSize="9" Foreground="{DynamicResource WorldMutedBrush}" />
+                                <TextBlock x:Name="OtherHeading" Text="" FontSize="20" Style="{DynamicResource TitleText}" Margin="0,9,0,6" />
+                                <TextBlock x:Name="OtherBody" Text="" FontSize="12" Style="{DynamicResource BodyText}" TextWrapping="Wrap" MaxWidth="600" />
+                                <StackPanel x:Name="SettingsControls" Visibility="Collapsed" Margin="0,20,0,0">
+                                    <TextBlock Text="VISUAL THEME" FontSize="9" Foreground="{DynamicResource WorldMutedBrush}" />
+                                    <ComboBox x:Name="ThemeSelector" Width="220" HorizontalAlignment="Left" Margin="0,8,0,18" Padding="9,6" SelectedValuePath="Content" Background="#FF111318" Foreground="{DynamicResource WorldWhiteBrush}" BorderBrush="{DynamicResource GlassStrokeBrush}" SelectionChanged="ThemeSelector_SelectionChanged">
+                                        <ComboBoxItem Content="Lumin" />
+                                        <ComboBoxItem Content="Rain" />
+                                        <ComboBoxItem Content="Synth" />
+                                    </ComboBox>
+                                    <TextBlock Text="INTERFACE SCALE" FontSize="9" Foreground="{DynamicResource WorldMutedBrush}" />
+                                    <DockPanel Margin="0,8,0,0" MaxWidth="400" HorizontalAlignment="Left">
+                                        <TextBlock x:Name="ScaleValue" DockPanel.Dock="Right" Text="100%" Foreground="{DynamicResource WorldSilverBrush}" VerticalAlignment="Center" Margin="12,0,0,0" />
+                                        <Slider x:Name="ScaleSlider" Minimum="0.75" Maximum="1.5" Value="1" TickFrequency="0.05" IsSnapToTickEnabled="True" IsMoveToPointEnabled="True" ToolTip="Drag to preview; release to apply" ValueChanged="ScaleSlider_ValueChanged" />
+                                    </DockPanel>
+                                    <TextBlock Text="Changes are saved to the active profile." FontSize="10" Foreground="{DynamicResource WorldMutedBrush}" Margin="0,4,0,0" />
+                                </StackPanel>
+                                <StackPanel x:Name="ProfileControls" Visibility="Collapsed" Margin="0,18,0,0">
+                                    <ComboBox x:Name="ProfileSelector" MinWidth="250" HorizontalAlignment="Left" Padding="9,6" SelectionChanged="ProfileSelector_SelectionChanged" />
+                                    <WrapPanel Margin="0,12,0,0">
+                                        <Button Content="Duplicate" Style="{StaticResource FilterButton}" Click="DuplicateProfile_Click" Margin="0,0,8,8" />
+                                        <Button Content="Delete" Style="{StaticResource FilterButton}" Click="DeleteProfile_Click" Margin="0,0,8,8" />
+                                        <Button Content="Import JSON" Style="{StaticResource FilterButton}" Click="ImportProfile_Click" Margin="0,0,8,8" />
+                                        <Button Content="Export JSON" Style="{StaticResource FilterButton}" Click="ExportProfile_Click" Margin="0,0,8,8" />
+                                    </WrapPanel>
+                                    <TextBlock x:Name="ProfileStatus" Text="" FontSize="11" Foreground="{DynamicResource WorldMutedBrush}" TextWrapping="Wrap" />
+                                </StackPanel>
+                            </StackPanel>
+                        </Border>
+                    </Grid>
+                </Grid>
+            </Border>
+        </Grid>
+    </Grid>
+</Window>
